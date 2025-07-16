@@ -1,1 +1,2 @@
 # course-selling-platform
+# eduCrate
