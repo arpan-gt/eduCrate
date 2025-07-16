@@ -5,6 +5,6 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-app.listen(prompt, () => {
+app.listen(PORT, () => {
   console.log(`listening to PORT ${PORT}`);
 });
