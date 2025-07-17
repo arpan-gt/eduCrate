@@ -7,12 +7,13 @@ import jwt from 'jsonwebtoken';
 userRouter.post("/signup", async (req, res) => {
   const { email, password, userName } = req.body;
 
-  if (!email || !password || !userName) {
-    return res.status(400).json(
-      {
-        message: "all fields are required"
-      })
-  }
+  if (!email || !password || !userName) 
+    {
+      return res.status(400).json(
+        {
+          message: "All fields are required"
+        })
+    }
 
 
   try {
@@ -30,7 +31,7 @@ userRouter.post("/signup", async (req, res) => {
 
     return res.status(201).json(
       {
-        message: "user registered successfully",
+        message: "User registered successfully",
         user: {
           id: user._id
         }
@@ -40,7 +41,7 @@ userRouter.post("/signup", async (req, res) => {
   } catch (err) {
     return res.status(500).json(
       {
-        message: "user not registered! try again",
+        message: "User not registered! try again",
         error: err.message
       }
     )
@@ -54,7 +55,7 @@ userRouter.post("/signin", async (req, res) => {
   if (!email || !password) {
     return res.status(400).json(
       {
-        message: "all fields are required"
+        message: "All fields are required"
       }
     )
   }
@@ -65,7 +66,7 @@ userRouter.post("/signin", async (req, res) => {
     if (!existingUser) {
       return res.status(400).json(
         {
-          message: "user not registered"
+          message: "User not registered"
         })
     }
 
@@ -73,7 +74,7 @@ userRouter.post("/signin", async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(401).json(
         {
-          message: "invalid credentials"
+          message: "Invalid credentials"
         }
       )
     }
@@ -81,7 +82,7 @@ userRouter.post("/signin", async (req, res) => {
 
     return res.status(200).json(
       {
-        message: "login successfully",
+        message: "Login successfully",
         token,
         user: {
           id: existingUser._id,
@@ -94,13 +95,12 @@ userRouter.post("/signin", async (req, res) => {
   } catch (err) {
     return res.status(500).json(
       {
-        message: "something went wrong",
+        message: "Something went wrong",
         error: err.message
       }
     )
   }
+});
 
 
-
-})
 export { userRouter };
