@@ -4,9 +4,11 @@ import cors from "cors";
 import express from "express";
 const app = express();
 import dotenv from "dotenv";
+import connectDB from "./utils/db.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
+connectDB();
 
 app.use(express.json());
 app.use(cors());
