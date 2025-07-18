@@ -1,4 +1,5 @@
 import { Admin } from "../models/Admin.models.js";
+import { Course } from "../models/Course.model.js"
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -90,6 +91,25 @@ const signin = async (req, res) => {
   )
 };
 
+const createCourse = async (req, res) => {
+  const { title, description, price } = req.body;
+  try {
+    const course = await Course.create({ title, description, price });
 
+    return res.status(201).json({
+      message: "Course created successfully", course
+    })
+  }
+  catch (err) {
+    console.log("error creating course", err);
+    return res.status(500).json({
+      message: "Internal server error"
+    })
+  }
+};
 
-export { signin, signup }
+const updateCourse = async (req, res) => {
+
+}
+
+export { signin, signup, createCourse, updateCourse }
