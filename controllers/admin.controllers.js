@@ -109,7 +109,26 @@ const createCourse = async (req, res) => {
 };
 
 const updateCourse = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, price } = req.body;
 
+  try {
+    const updatedCourse = await Course.findByIdAndUpdate(id, { title, description, price }, { new: true, runValidators: true });
+
+    if (!updatedCourse) {
+      return res.status(404).json({
+        message: "Course not found"
+      })
+    }
+
+    return res.status(200).json({
+      message: "Course updated successfully",
+      course: updatedCourse
+    })
+  } catch (err) {
+    console.error("Error updating course:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }
 
 export { signin, signup, createCourse, updateCourse }
