@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Admin } from "../models/Admin.models.js";
 import { Course } from "../models/Course.model.js"
 import bcrypt from 'bcrypt';
@@ -131,4 +132,47 @@ const updateCourse = async (req, res) => {
   }
 }
 
-export { signin, signup, createCourse, updateCourse }
+const allCourses = async (req, res) => {
+  try {
+    const courses = await Course.find();
+
+    return res.status(200).json(
+      {
+        message: "Courses fetched successfully",
+        courses
+      });
+  } catch (error) {
+
+    console.error("Error fetching courses:", err);
+    return res.status(500).json({
+      message: "Internal server error"
+    });
+  }
+}
+
+const deleteCourse = async (req, res) => {
+  const {id} = req.params;
+
+  try {
+    const deletedCourse = await Course.findByIdAndDelete(id);
+
+    if (!deletedCourse) {
+      return res.status(404).json({ 
+        message: "Course not found"
+      })
+    }
+
+    return res.status(200).json({
+      message: "Course deleted successfully",
+      deletedCourse
+    })
+  } catch (err) {
+    console.log("error deleting course", err);
+    return res.status(500).json({
+      message: "Internal server error"
+    })
+  }
+}
+
+
+export { signin, signup, createCourse, updateCourse, allCourses, deleteCourse }
