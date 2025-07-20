@@ -86,8 +86,9 @@ const signin = async (req, res) => {
 const createCourse = async (req, res) => {
 
   const { title, description, price } = req.validatedData;
+
   try {
-    const course = await Course.create({ title, description, price });
+    const course = await Course.create({ title, description, price, creatorId: req.adminId });
 
     return res.status(201).json({
       message: "Course created successfully", course
@@ -107,7 +108,7 @@ const updateCourse = async (req, res) => {
   const { title, description, price } = req.validatedData;
 
   try {
-    const updatedCourse = await Course.findByIdAndUpdate(id, { title, description, price }, { new: true, runValidators: true });
+    const updatedCourse = await Course.findByIdAndUpdate(id, { title, description, price });
 
     if (!updatedCourse) {
       return res.status(404).json({
@@ -127,7 +128,7 @@ const updateCourse = async (req, res) => {
 
 const allCourses = async (req, res) => {
   try {
-    const courses = await Course.find();
+    const courses = await Course.find({ creatorId: req.adminId });
 
     return res.status(200).json(
       {
@@ -146,7 +147,10 @@ const deleteCourse = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedCourse = await Course.findByIdAndDelete(id);
+    const deletedCourse = await Course.findOneAndDelete({
+      _id: id,
+      creatorId: req.adminId
+    });
 
     if (!deletedCourse) {
       return res.status(404).json({
@@ -165,6 +169,5 @@ const deleteCourse = async (req, res) => {
     })
   }
 }
-
 
 export { signin, signup, createCourse, updateCourse, allCourses, deleteCourse }
