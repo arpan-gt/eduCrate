@@ -7,25 +7,25 @@ const courseSchema = new mongoose.Schema(
         type: String,
         required: true,
         minlength: 1,
-        trim:true
+        trim: true
       },
     description:
       {
         type: String,
-        required:true,
+        required: true,
       },
     price:
       {
         required: true,
-        type:Number
+        type: Number
       },
-    courseId:
+    creatorId:
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin",
-        required:true
+        required: true
       }
   },
   { timestamps: true });
-  const Course=mongoose.model("Course",courseSchema);
-  export {Course}
+const Course = mongoose.model("Course", courseSchema);
+export { Course }
