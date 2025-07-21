@@ -1,11 +1,12 @@
 import express from "express";
 const userRouter = express.Router();
-import { signup, signin, purchases } from "../controllers/user.controllers.js";
+import { purchases, signin, signup } from "../controllers/user.controllers.js";
 import { userMiddleware } from "../middlewares/user.middleware.js";
 import { validateRequest } from "../middlewares/validateRequest.middleware.js";
+import { signinSchema, signupSchema } from "../schemas/auth.schemas.js";
 
-userRouter.post("/signup", validateRequest(signup), signup);
-userRouter.post("/signin", validateRequest(signin), signin);
+userRouter.post("/signup", validateRequest(signupSchema), signup);
+userRouter.post("/signin", validateRequest(signinSchema), signin);
 userRouter.get("/purchases", userMiddleware, purchases);
 
 export { userRouter };
