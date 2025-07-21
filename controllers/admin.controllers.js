@@ -103,23 +103,26 @@ const createCourse = async (req, res) => {
 };
 
 const updateCourse = async (req, res) => {
+  const adminId = req.adminId;
   const { id } = req.params;
 
-  const { title, description, price } = req.validatedData;
-
   try {
-    const updatedCourse = await Course.findByIdAndUpdate(id, { title, description, price });
+    const updatedCourse = await Course.findOneAndUpdate({ _id: id, creatorId: adminId }, { title, description, price }, {
+      new: true
+    });
 
     if (!updatedCourse) {
-      return res.status(404).json({
-        message: "Course not found"
-      })
+      return res.status(404).json(
+        {
+          message: "Course not found"
+        })
     }
 
-    return res.status(200).json({
-      message: "Course updated successfully",
-      course: updatedCourse
-    })
+    return res.status(200).json(
+      {
+        message: "Course updated successfully",
+        course: updatedCourse
+      })
   } catch (err) {
     console.error("Error updating course:", err);
     return res.status(500).json({ message: "Internal server error" });
@@ -128,7 +131,7 @@ const updateCourse = async (req, res) => {
 
 const allCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ creatorId: req.adminId });
+    const courses = await Course.find({ creatorId: req.adminId }).populate("creatorId", "userName email");
 
     return res.status(200).json(
       {
@@ -137,9 +140,10 @@ const allCourses = async (req, res) => {
       });
   } catch (err) {
     console.error("Error fetching courses:", err);
-    return res.status(500).json({
-      message: "Internal server error"
-    });
+    return res.status(500).json(
+      {
+        message: "Internal server error"
+      });
   }
 }
 
@@ -153,20 +157,23 @@ const deleteCourse = async (req, res) => {
     });
 
     if (!deletedCourse) {
-      return res.status(404).json({
-        message: "Course not found"
-      })
+      return res.status(404).json(
+        {
+          message: "Course not found"
+        })
     }
 
-    return res.status(200).json({
-      message: "Course deleted successfully",
-      deletedCourse
-    })
+    return res.status(200).json(
+      {
+        message: "Course deleted successfully",
+        deletedCourse
+      })
   } catch (err) {
     console.log("error deleting course", err);
-    return res.status(500).json({
-      message: "Internal server error"
-    })
+    return res.status(500).json(
+      {
+        message: "Internal server error"
+      })
   }
 }
 
