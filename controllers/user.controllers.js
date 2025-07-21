@@ -1,18 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from "../models/User.models.js";
+import { Purchase } from '../models/Purchase.models.js';
 
 
 const signup = async (req, res) => {
-  const { email, password, userName } = req.body;
 
-  if (!email || !password || !userName) {
-    return res.status(400).json(
-      {
-        message: "All fields are required"
-      })
-  }
-
+  const { email, password, userName } = req.validatedData;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -48,15 +42,7 @@ const signup = async (req, res) => {
 
 
 const signin = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json(
-      {
-        message: "All fields are required"
-      }
-    )
-  }
+  const { email, password } = req.validatedData;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -100,5 +86,24 @@ const signin = async (req, res) => {
   }
 }
 
+const purchases = async (req, res) => {
+  const userId = req.userId;
 
-export { signup, signin }
+  try {
+
+    const purchases = await Purchase.find({ userId }).populate("courseId", "title price")
+    return res.status(200).json(
+      {
+        message: "Your purchased courses",
+        purchases: purchases.map(p => p.courseId)
+      });
+  } catch (err) {
+    console.error("Error fetching purchases:", err);
+    return res.status(500).json(
+      {
+        message: "Internal server error"
+      });
+  }
+}
+
+export { signup, signin, purchases }
