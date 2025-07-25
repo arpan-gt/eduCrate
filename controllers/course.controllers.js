@@ -54,4 +54,26 @@ const preview = async (req, res) => {
 
 }
 
+const previewOne = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res.status(400).json({
+        message: "Course not found"
+      })
+    }
+
+    return res.status(200).json({
+      message: "Course fetched successfully",
+      course
+    })
+  } catch (err) {
+    console.error("Error fetching course:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
 export { purchase, preview }
