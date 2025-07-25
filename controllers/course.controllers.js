@@ -76,4 +76,4 @@ const previewOne = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 }
-export { purchase, preview }
+export { purchase, preview, previewOne }
